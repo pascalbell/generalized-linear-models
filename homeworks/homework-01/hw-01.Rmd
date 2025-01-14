@@ -157,7 +157,7 @@ The goal of this analysis is to use characteristics of 593 colleges and universi
 The data set is located in `college-data.csv` in the `data` folder. We will focus on the following variables:
 
 | variable | class | description |
-|:------------------|:------------------|:----------------------------------|
+|:------------------|:------------------|:---------------------------------|
 | name | character | Name of school |
 | state_name | character | state name |
 | type | character | Public or private |
@@ -166,7 +166,52 @@ The data set is located in `college-data.csv` in the `data` folder. We will focu
 | out_of_state_total | double | Total cost for in-state residents in USD (sum of room & board + out of state tuition) |
 
 a.  Visualize the distribution of the response variable `early_career_pay`. Write 1 - 2 observations from the plot.
+
+```{r}
+salaries <- read_csv("../data/college-data.csv")
+salaries |>
+  ggplot(aes(x = early_career_pay)) +
+  geom_histogram(color = "black", fill = "lightblue") +
+  theme_bw() +
+  labs(x = "Early Career Pay",
+       y = "Count",
+       title = "Distribution of Early Career Pay for Alumni") +
+  scale_x_continuous(labels = scales::dollar_format())
+```
+
+> 1.  One observation from this plot is that most of the data is centered within the \$40,000-\$60,000 range
+> 2.  Another observation from this plot is that the data seems slightly skewed right with a tail on the right side, where there are a handful of outliers.
+
 b.  Visualize the relationship between (i) `early_career_pay` and `type` and (ii) `early_career_pay` and `stem_percent`. Write an observation from each plot.
+
+```{r}
+salaries |>
+  ggplot(aes(x = type, y = early_career_pay)) +
+  geom_boxplot(color = "black", fill = "lightblue") +
+  theme_bw() +
+  labs(x = "Type of University",
+       y = "Early Career Pay",
+       title = "Early Career Pay of Alumni",
+       subtitle = "Based on type of university") +
+  scale_y_continuous(labels = scales::dollar_format())
+
+salaries |>
+  mutate(stem_percent = stem_percent / 100) |>
+  ggplot(aes(x = stem_percent, y = early_career_pay)) +
+  geom_point(alpha = 0.75) +
+  theme_bw() +
+  labs(x = "Percent of Degrees Awarded in STEM Subjects",
+       y = "Early Career Pay",
+       title = "Positive Correlation between Early Career Pay and STEM Degrees") +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  scale_x_continuous(labels = scales::percent_format())
+```
+
+>An observation from the first plot is that private universities have many more outliers with schools where the median early career pay is over $70,000, in comparison to public universities. It seems like private universities have a higher cap for early career pay.
+
+>An observation from the second plot is that there seems to be a positive correlation between the percent of degrees awarded in STEM subjects and early career pay for alumni, where schools with more stem degrees tend to have a higher median early career pay.
+
+
 c.  Below is the specification of the statistical model for this analysis. Fit the model and neatly display the results using 3 digits. Display the 95% confidence interval for the coefficients.
 
 \begin{align}
@@ -174,8 +219,21 @@ early\_career\_pay_{i} = \beta_0 &+ \beta_1~out\_of\_state\_total_{i} + \beta_2 
 &+ \beta_3 ~ stem\_percent_{i} + \beta_4 ~ type * stem\_percent_{i} \\ &+ \epsilon_{i}, \hspace{5mm} \text{where } \epsilon_i \sim N(0, \sigma^2)
 \end{align}
 
+```{r}
+linear_reg() |>
+  set_engine("lm") |>
+  fit(early_career_pay ~ out_of_state_total + type + stem_percent + type * stem_percent, data = salaries) |>
+  tidy(conf.int = TRUE) |>
+  mutate(across(where(is.numeric), ~ round(.x, 3)))
+```
+
 d.  How many degrees of freedom are there in the estimate of the regression standard error $\sigma$?
+
+**NOT SURE**
+
 e.  What is the 95% confidence interval for the amount in which the intercept for public institutions differs from private institutions?
+
+**NOT SURE**
 
 ## Exercise 6
 
