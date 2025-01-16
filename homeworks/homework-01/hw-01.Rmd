@@ -41,9 +41,7 @@ b.  Write the complete specification of the statistical model.
 
 > $y_{ij} = x_i^T*B + e_{ij}$
 
-> Where $y_{ij}$ is the temperature of the jth observation of the ith group and $x_i$ is the mean cricket chirps for the ith group.
-
-**\^\^DOUBLE CHECK**
+> Where $y_{ij}$ is the temperature of the jth observation of the ith group and $x_i$ is the mean cricket chirps for the ith group. B represents the estimated change in cricket chirps per minute for a one unit increase in temperature. The $e_{ij}$ term represents the error, or the difference between the predicted chirps per minute, and the actual chirps per minute for a given temperature.
 
 c.  Write the assumptions for linear regression in the context of the problem.
 
@@ -84,7 +82,7 @@ a.  Consider [Equation (1.3)](https://bookdown.org/roback/bookdown-BeyondMLR/ch-
 
 b.  Briefly explain why there is no error (random variation) term $\epsilon_i$ in [Equation (1.4)](https://bookdown.org/roback/bookdown-BeyondMLR/ch-MLRreview.html#multiple-linear-regression-with-an-interaction-term) in Section 1.6.6?
 
-> **THERE IS AN ERROR TERM IN THIS LINK??** There is no random variable term in the given equation because the equation does not represent the statistical model, but represents the formula used by the R to build the linear regression model. We can see that the statistical model does in fact include an error term instead.
+> The equation provided represents the predicted regression model that is used to estimate the response. Therefore there is no error term since the predicted value falls on the line of best fit provided by the equation; the error term is 0.
 
 ## Exercise 4
 
@@ -126,7 +124,7 @@ linear_reg() |>
   tidy()
 ```
 
-> `logprice` of a house is expected to increase by .0399 **UNIT??** when `sqft` increases by 100
+> `logprice` of a house is expected to increase by .0399 when `sqft` increases by 100
 
 c.  Recall that $log(a) - log(b) = log(\frac{a}{b})$. Use this to derive how the `price` is expected to change when `sqft` increases by 100 based on Model 2.
 
@@ -177,6 +175,7 @@ salaries |>
        y = "Count",
        title = "Distribution of Early Career Pay for Alumni") +
   scale_x_continuous(labels = scales::dollar_format())
+
 ```
 
 > 1.  One observation from this plot is that most of the data is centered within the \$40,000-\$60,000 range
@@ -207,10 +206,9 @@ salaries |>
   scale_x_continuous(labels = scales::percent_format())
 ```
 
->An observation from the first plot is that private universities have many more outliers with schools where the median early career pay is over $70,000, in comparison to public universities. It seems like private universities have a higher cap for early career pay.
+> An observation from the first plot is that private universities have many more outliers with schools where the median early career pay is over \$70,000, in comparison to public universities. It seems like private universities have a higher cap for early career pay.
 
->An observation from the second plot is that there seems to be a positive correlation between the percent of degrees awarded in STEM subjects and early career pay for alumni, where schools with more stem degrees tend to have a higher median early career pay.
-
+> An observation from the second plot is that there seems to be a positive correlation between the percent of degrees awarded in STEM subjects and early career pay for alumni, where schools with more stem degrees tend to have a higher median early career pay.
 
 c.  Below is the specification of the statistical model for this analysis. Fit the model and neatly display the results using 3 digits. Display the 95% confidence interval for the coefficients.
 
@@ -229,15 +227,24 @@ linear_reg() |>
 
 d.  How many degrees of freedom are there in the estimate of the regression standard error $\sigma$?
 
-**NOT SURE**
+```{r}
+salaries |>
+  nrow()
+```
+
+>There are 588 degrees of freedom for this estimate of the regression standard error. There are 593 total rows in the dataset and 5 coefficients in the model (including the intercept), so there are 588 total degrees of freedom.
+
 
 e.  What is the 95% confidence interval for the amount in which the intercept for public institutions differs from private institutions?
 
-**NOT SURE**
+>We are 95% confident that the true mean difference in median early career pay between public and private institutions is between \$-324.813 and $2,694.853
 
 ## Exercise 6
 
 Use the analysis from the previous exercise to write a paragraph (\~ 4 - 5 sentences) describing the differences in early career pay based on the institution characteristics. *The summary should be consistent with the results from the previous exercise, comprehensive, answers the primary analysis question, and tells a cohesive story (e.g., a list of interpretations will not receive full credit).*
+
+> Based on exploratory data analysis, it seemed like public and private universities lead to similar early career pay for alumni; however, there are more higher outliers with some private schools where alumni have a median early career pay of over $70,000. It also seems like generally the more stem degrees a school has, the more early career pay this results in. These results are also quantified by our regression model which shows that a one percent increase in STEM degrees results in an expected increase of $214.306 for early career pay, for private institutions, and when all other variables are held constant. For a public university with zero percent stem degrees, we expect an increase of $1,185.02 in early career pay compared to private universities, while holding all other variables constant. If a university is public we expect an increase of $49.538 in early career salary every one percent increase in stem degrees, when all other variables are held constant. It is important to note that the confidence interval for the true mean difference in median early career pay between public and private institutions does contain zero, and its p-value is not statistically significant, so we can not conclude that there is a difference in the true mean difference in early career pay between public and private institutions. Our regression model also found that for every $1 increase in out of state total cost, we would expect an increase of $0.253 in early career pay. These results help us understand the variability in early career pay for college alumni.
+
 
 # Grading
 
