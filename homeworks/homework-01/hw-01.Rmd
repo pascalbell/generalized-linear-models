@@ -99,7 +99,7 @@ We will use the following variables:
 
 a.  Fit a linear regression model with `price` as the response variable and `sqft` as the predictor variable (Model 1). Interpret the slope coefficient in terms of the expected change in price when `sqft` increases by 100.
 
-```{r}
+```{r message=FALSE}
 library(tidyverse)
 library(tidymodels)
 
@@ -114,7 +114,7 @@ linear_reg() |>
 
 b.  Fit Model 2, where `logprice` (the natural log of price) is now the response variable and `sqft` is still the predictor variable. How is the `logprice` expected to change when `sqft` increases by 100?
 
-```{r}
+```{r message=FALSE}
 houses <- houses |>
   mutate(logprice = log(price))
 
@@ -132,7 +132,7 @@ c.  Recall that $log(a) - log(b) = log(\frac{a}{b})$. Use this to derive how the
 
 d.  Fit Model 3, where `price` and `logsqft` (the natural log of sqft) are the response and predictor variables, respectively. How does the price expected to change when sqft increases by 10%? *As a hint, this is the same as multiplying sqft by 1.10.*
 
-```{r}
+```{r message=FALSE}
 houses <- houses |>
   mutate(logsqft = log(sqft))
 
@@ -165,7 +165,7 @@ The data set is located in `college-data.csv` in the `data` folder. We will focu
 
 a.  Visualize the distribution of the response variable `early_career_pay`. Write 1 - 2 observations from the plot.
 
-```{r}
+```{r message=FALSE}
 salaries <- read_csv("../data/college-data.csv")
 salaries |>
   ggplot(aes(x = early_career_pay)) +
@@ -183,7 +183,7 @@ salaries |>
 
 b.  Visualize the relationship between (i) `early_career_pay` and `type` and (ii) `early_career_pay` and `stem_percent`. Write an observation from each plot.
 
-```{r}
+```{r message=FALSE}
 salaries |>
   ggplot(aes(x = type, y = early_career_pay)) +
   geom_boxplot(color = "black", fill = "lightblue") +
@@ -217,17 +217,18 @@ early\_career\_pay_{i} = \beta_0 &+ \beta_1~out\_of\_state\_total_{i} + \beta_2 
 &+ \beta_3 ~ stem\_percent_{i} + \beta_4 ~ type * stem\_percent_{i} \\ &+ \epsilon_{i}, \hspace{5mm} \text{where } \epsilon_i \sim N(0, \sigma^2)
 \end{align}
 
-```{r}
+```{r message=FALSE}
 linear_reg() |>
   set_engine("lm") |>
-  fit(early_career_pay ~ out_of_state_total + type + stem_percent + type * stem_percent, data = salaries) |>
+  fit(early_career_pay ~ out_of_state_total + type + stem_percent + type * stem_percent,
+      data = salaries) |>
   tidy(conf.int = TRUE) |>
   mutate(across(where(is.numeric), ~ round(.x, 3)))
 ```
 
 d.  How many degrees of freedom are there in the estimate of the regression standard error $\sigma$?
 
-```{r}
+```{r message=FALSE}
 salaries |>
   nrow()
 ```
