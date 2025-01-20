@@ -91,12 +91,15 @@ d.  Plot a histogram of these beta-binomial observations.
 
 Compare the histograms of the "plain old" binomial and beta-binomial distributions. How do their shapes, standard deviations, means, possible values, etc. compare?
 
-```{r}
+```{r message=FALSE}
 library(tidyverse)
 
-rbinom(1000, 10, 0.8) |>
+set.seed(310)
+
+binom <- rbinom(1000, 10, 0.8)
+binom |>
   tibble() |>
-  rename("Observation" = `rbinom(1000, 10, 0.8)`) |>
+  rename("Observation" = `binom`) |>
   ggplot(aes(x = Observation)) +
   geom_histogram(binwidth = 1,
                  color = "black",
@@ -119,12 +122,29 @@ data |>
   geom_histogram(binwidth = 1,
                  color = "black",
                  fill = "lightblue") +
-  scale_x_continuous(breaks = seq(1, 10, by = 1)) +
+  scale_x_continuous(breaks = seq(0, 10, by = 1)) +
   labs(x = "Observation",
        y = "Count",
        title = "Beta-Binomial Distribution")
 
+data |>
+  sd()
+
+binom |>
+  sd()
+
 ```
+
+Compare the histograms of the “plain old” binomial and beta-binomial distributions. How do their shapes,
+standard deviations, means, possible values, etc. compare?
+
+The shape of the plain old binomial distribution looks relatively normally distributed around the mean, 8; however, it is slightly skewed right with a tail on the left side. This distribution does not have any observations of 1-3, and the minimum value is 4.
+
+On the other hand, the beta-binomial distribution is heavily skewed right with a long tail on the left, with a minimum value of 0. The beta-binomial distribution has a higher standard deviation (2.12 compared to 1.27 for binomial distribution). The mode of the beta-binomial distribution is 10, which is much more common than any of the other observations.
+
+They are both similar in that most of the data is contained in the 7-10 range.
+
+**DOUBLE CHECK THE CODE (SHOULD 0 BE ALLOWED AS OBSERVATION)**
 
 
 # Grading
