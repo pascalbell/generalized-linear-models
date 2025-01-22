@@ -22,7 +22,7 @@ These exercises come from BMLR or are adapted from BMLR, Chapter 3.
 
 At what value of $p$ is the variance of a binary random variable smallest? When is the variance the largest? Back up your answer empirically or mathematically.
 
-**IS THIS BERNOULI WHAT DISTRIBUTION??**
+> For a binary random variable X, that takes on the values 0 and 1, there are two possible probability outcomes: $p$, the probability of a success, and \$(1-p), the probability of a failure. Therefore the expectation of this binary random variable is equal to $E[X] = 1(p) + 0(1-p) = p$. The second moment is equal to: $E[X^2] = 1^2(p) + 0^2(1-p) = p$. The variance is therefore equal to: $Var(X) = E[X^2] - (E[X])^2 = p - (p)^2 = p - p^2$. Since this is a negative quadratic function, we can find that the maximum is at the vertex, when p = 0.5, with a variance of 0.25. Since the variance is bounded by the constraints that $0 <= p <= 1$, we can calculate that the minimum is either when p = 0 or when p = 1. After calculating both points, we can see that the minimum is when p = 0 or p = 1, with a variance of 0 for both values of p.
 
 ## Exercise 2
 
@@ -40,19 +40,19 @@ How are exponential and Poisson random variables related?
 
 How are geometric and exponential random variables similar? How are they different?
 
-> Geometric random variables represent the number of trials required to get to the first success of a Bernoulli trial. Exponential random variables represent the time between two events/trials. They are similar in that they both depend on the first occurence or success in a process. They are similar in that exponential variables represent time (continous) while geometric variables represent a number of trials (discrete).
+> Geometric random variables represent the number of trials required to get to the first success of a Bernoulli trial. Exponential random variables represent the time between two events/trials. They are similar in that they both depend on the first occurrence or success in a process. They are similar in that exponential variables represent time (continuous) while geometric variables represent a number of trials (discrete).
 
 ## Exercise 5
 
 A university's college of sciences is electing a new board of 5 members. There are 35 applicants, 10 of which come from the math department. What distribution could be helpful to model the probability of electing $X$ board members from the math department?
 
-> A hypergeometric distribution could be helpful to model the probility of electing $X$ board members from the math departhemt. This is because this process can be represented by the probability of $X$ successes in a fixed number of trials (5), without replacement (since no member can be chosen twice.)
+> A hypergeometric distribution could be helpful to model the probability of electing $X$ board members from the math department. This is because this process can be represented by the probability of $X$ successes in a fixed number of trials (5), without replacement (since no member can be chosen twice.)
 
 ## Exercise 6
 
 Chapter 1 asked you to consider a scenario where *"The Minnesota Pollution Control Agency is interested in using traffic volume data to generate predictions of particulate distributions as measured in counts per cubic feet."* What distribution might be useful to model this count per cubic foot? Why?
 
-> We can use a Poisson distribution. We can use a Poisson distribution to model the model the occurences of an event, distributed across a randomly distributed space. Poisson distributions are often used to model the number of bacteria in a specific area, and similarly, we can use the Poisson distribution to model the counts per cubic feet of particulate distributions accross a specific area (one cubic foot).
+> We can use a Poisson distribution. We can use a Poisson distribution to model the model the occurrences of an event, distributed across a randomly distributed space. Poisson distributions are often used to model the number of bacteria in a specific area, and similarly, we can use the Poisson distribution to model the counts per cubic feet of particulate distributions across a specific area (one cubic foot).
 
 **DOUBLE CHECK THIS**
 
@@ -60,9 +60,7 @@ Chapter 1 asked you to consider a scenario where *"The Minnesota Pollution Contr
 
 Chapter 1 also asked you to consider a scenario where *"Researchers are attempting to see if socioeconomic status and parental stability are predictive of low birthweight. They classify a low birthweight as below 2500 g, hence our response is binary: 1 for low birthweight, and 0 when the birthweight is not low."* What distribution might be useful to model if a newborn has low birthweight?
 
-> We can use a binomial distribution. In a binary distribution, we model the number of binary successes in fixed number of independent trials. We can model the scenario above because the outcome is binary (1 or 0) and there are a fixed number of independent trails (each participant is a trail).
-
-**OR BERNOULI IF ONLY ONE TRIAL?**
+> We can use a Bernoulli distribution. In a Bernoulli distribution, we model the probability of an event, where there are only two outcomes, a success and failure. We can model the scenario above because the outcome is binary (1 or 0) and a success would be low birth weight and a failure would be not low birth weight.
 
 ## Exercise 8
 
@@ -135,17 +133,13 @@ binom |>
 
 ```
 
-Compare the histograms of the “plain old” binomial and beta-binomial distributions. How do their shapes,
-standard deviations, means, possible values, etc. compare?
+Compare the histograms of the “plain old” binomial and beta-binomial distributions. How do their shapes, standard deviations, means, possible values, etc. compare?
 
 The shape of the plain old binomial distribution looks relatively normally distributed around the mean, 8; however, it is slightly skewed right with a tail on the left side. This distribution does not have any observations of 1-3, and the minimum value is 4.
 
 On the other hand, the beta-binomial distribution is heavily skewed right with a long tail on the left, with a minimum value of 0. The beta-binomial distribution has a higher standard deviation (2.12 compared to 1.27 for binomial distribution). The mode of the beta-binomial distribution is 10, which is much more common than any of the other observations.
 
 They are both similar in that most of the data is contained in the 7-10 range.
-
-**DOUBLE CHECK THE CODE (SHOULD 0 BE ALLOWED AS OBSERVATION)**
-
 
 # Grading
 
