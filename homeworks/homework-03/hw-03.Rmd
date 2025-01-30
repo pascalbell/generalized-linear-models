@@ -92,9 +92,9 @@ lambda[lik == max(lik)]
 
 a.  Fill out Table \@ref(tab:hothandchp2)---write out the contribution of each game to the likelihood for both models along with the total likelihood for each model.
 
->Total likelihood for hot hand model is $(p_B)^{10}(1-p_B)^{15}$
+>Total likelihood for no hot hand model is $(p_B)^{10}(1-p_B)^{15}$
 
->Total likelihood for hot hand is $(p_B^7)(p_{B|B})^1(1-p_{B|B})^7(1-p_B)^{10}$
+>Total likelihood for hot hand is $(p_B)^7(p_{B|B})^3(1-p_{B|B})^4(1-p_B)^{11}$
 
 b.  Given that, for the No Hot Hand model, $\textrm{Lik}(p_B)=p_B^{10}(1-p_B)^{15}$ for the 5 games where we collected data, how do we know that 0.40 (the maximum likelihood estimator (MLE) of $p_B$) is a better estimate than, say, 0.30?
 
@@ -104,11 +104,66 @@ b.  Given that, for the No Hot Hand model, $\textrm{Lik}(p_B)=p_B^{10}(1-p_B)^{1
 
 c.  Find the MLEs for the parameters in each model, and then use those MLEs to determine if there's significant evidence that the hot hand exists using a likelihood ratio test (LRT). Be sure to specify the test and provide all details of your approach, including reproducible code used.
 
+We can create a hypothesis test between the two models, where the null and alternate hypothesis are:
+
+$H_0:p_{B(conditional)} = p_{B|B} = p_{B (unconditional)}$
+$H_a:$ At least one of $p_{B(conditional)}, p_{B|B}, p_{B(unconditional)}$ differs from the others.
+
+Let's test the null hypotheses:
+
+MLE for no hot hand model:
+$\hat{p_B} = \frac{10}{25} = 0.4$
+
+MLEs for hot hand model:
+$\hat{p_B} = \frac{7}{18} = 0.39$
+$\hat{p_{B|B}} = \frac{3}{7} = 0.43$
+
+The maximum value for the log likelihood for the unconditional model is -16.825 and the maximum value for the log likelihood for the conditional model is approximately -16.809.
+
+The differences in the maximum likelihood is approximately -0.016.
+
+The LRT is -0.03292466.
+
+The LRT statistic follows a chi squared distribution with 1 degree of freedom. Therefore, the p-value is $P(X^2 > LRT)$ The p-value is very large, so we fail to reject the null hypothesis. We do not find evidence that the conditional model is an improvement over the unconditional model, and we do not find significant evidence that hot hand exists.
+
+Below is the code that calculates all the variables used above.
+
+**DOUBLE CHECK THIS P VALUE AND ALL**
+
+```{r}
+log_lik_no_hot <- function(p_b) {
+  return(log((p_b)^10 * (1-p_b)^15))
+}
+
+log_lik_hot_pb <- function(pb) {
+  return(7*log(pb) + 11*log(1-pb))
+}
+
+log_lik_hot_pbb <- function(pbb) {
+  return(3*log(pbb) + 4*log(1-pbb))
+}
+
+mle_no_hot_pb <- unname(unlist(optimize(log_lik_no_hot, interval = c(0, 1), maximum = TRUE)[1]))
+mle_hot_pb <- unname(unlist(optimize(log_lik_hot_pb, interval = c(0, 1), maximum = TRUE)[1]))
+mle_hot_pbb <- unname(unlist(optimize(log_lik_hot_pbb, interval = c(0, 1), maximum = TRUE)[1]))
+
+max_log_lik_no_hot <- log_lik_no_hot(mle_no_hot_pb)
+max_log_lik_hot <- log_lik_hot_pb(mle_hot_pb) + log_lik_hot_pbb(mle_hot_pbb)
+
+diff <- max_log_lik_no_hot - max_log_lik_hot
+
+LRT <- 2 * diff
+
+pchisq(LRT, 1, lower.tail = FALSE)
+
+```
+
+
 | Game | First five shots | Likelihood (no hot hand) | Likelihood (hot hand) |
 |----------------|----------------|----------------|-------------------------|
-| 1 | BMMBB | $(p_B)^3(1-p_B)^2$ | $(p_B^2)(p_{B|B})^1(1-p_{B|B})^1(1-p_B)^1$ |
-| 2 | MBMBM | $(p_B)^2(1-p_B)^3$ | $(p_B)^2(p_{B|B})^0(1-p_{B|B})^3(1-p_B)^0$ |
-| 3 | MMBBB | $(p_B)^3(1-p_B)^2$ | $(p_B)^1(p_{B|B})^0(1-p_{B|B})^2(1-p_B)^2$ |
+| 1 | BMMBB | $(p_B)^3(1-p_B)^2$ | $(p_B)^2(p_{B|B})^1(1-p_{B|B})^1(1-p_B)^1$ |
+| 2 | MBMBM | $(p_B)^2(1-p_B)^3$ | $(p_B)^2(p_{B|B})^0(1-p_{B|B})^2(1-p_B)^1$ |
+| 3 | MMBBB | $(p_B)^3(1-p_B)^2$ | $(p_B)^1(p_{B|B})^2(1-p_{B|B})^0(1-p_B)^2$ |
 | 4 | BMMMB | $(p_B)^2(1-p_B)^3$ | $(p_B)^2(p_{B|B})^0(1-p_{B|B})^1(1-p_B)^2$ |
 | 5 | MMMMM | $(p_B)^0(1-p_B)^5$ | $(p_B)^0(p_{B|B})^0(1-p_{B|B})^0(1-p_B)^5$ |
 
